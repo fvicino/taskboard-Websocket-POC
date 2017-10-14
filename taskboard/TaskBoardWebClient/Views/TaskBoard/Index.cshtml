@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "TaskBoard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Head{
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/BaseLib.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/TaskBoard.js")"></script>
+    
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            currentTaskBoard = new TaskBoard();
+            currentTaskBoard.StateUrl = '@(Url.Action("TaskBoardState"))';
+            $('#btnrefresh').click(function () {
+                $('#TaskBoard').empty();
+
+                currentTaskBoard.renderTaskBoardStyle('TaskBoard', $('#viewStyle').val() || currentTaskBoard.ViewStyle);
+            });
+            $('#btnrefresh').click();
+        });
+
+        $(document).keydown(function (e) {
+            if (e.altKey && e.which == 67) {
+                if ($('#console').css('display') == 'none') {
+                    $('#console').show();
+                } else {
+                    $('#console').hide();
+                }
+            } else if (e.which == 13 || e.which == 10) {
+                currentTaskBoard.webSocketClient.onMessage({ data: $('#messageBox').val() });
+                currentTaskBoard.webSocketClient.sendMessage();
+            }
+        });
+
+
+    </script>
+}
+
+    <div id="TaskBoard"></div>
+

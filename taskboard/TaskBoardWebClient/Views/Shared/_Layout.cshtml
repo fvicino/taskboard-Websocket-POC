@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>TaskBoard</title>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
+
+    @RenderSection("Head")
+</head>
+
+<body>
+    <div class="page">
+        <div id="header">
+            <div id="title">
+                <h1 style="float: left">
+                    Taskboard
+                </h1>
+                <input style="float: left" type="text" id="viewStyle" />
+                <input style="float: left" type="button" id="btnrefresh" />
+            </div>
+        </div>
+        <div id="main">
+            @RenderBody()
+            <div id="footer">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

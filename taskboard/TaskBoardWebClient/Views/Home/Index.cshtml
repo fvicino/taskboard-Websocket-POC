@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "TaskBoard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Head{
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Base/namespace.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Base/ClassExtensions.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Services/EventBroker.js")"></script>
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Services/Storage.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Base/Base.js")"></script>
+    <script src="../../Scripts/Base/UIElement.js" type="text/javascript"></script>
+    <script src="../../Scripts/Base/DragableElement.js" type="text/javascript"></script>
+    <script src="../../Scripts/Base/UIFactory.js" type="text/javascript"></script>    
+    
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Base/BaseRenderer.js")"></script>
+    
+    <script type="text/javascript" src="@Url.Content("~/Scripts/TaskBoard/Task.js")"></script>
+    
+@*    <script type="text/javascript" src="@Url.Content("~/Scripts/Services/DragHelper.js")"></script>*@
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Services/WebSocketClient.js")"></script>
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/TaskBoard/TaskBoard.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Renderers/LanesRenderer.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/Renderers/ProjectRenderer.js")"></script>
+
+    
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            document.onmousemove = function(ev){ taskboard.eventBroker.publish('mousemove', ev); };
+
+            currentTaskBoard = new TaskBoard();
+            currentTaskBoard.StateUrl = '@(Url.Action("TaskBoardState"))';
+            $('#btnrefresh').click(function () {
+                $('#TaskBoardDiv').empty();
+
+                currentTaskBoard.renderTaskBoardStyle('TaskBoardDiv', $('#viewStyle').val() || currentTaskBoard.ViewStyle);
+            });
+            $('#btnrefresh').click();
+        });
+
+        $(document).keydown(function (e) {
+            if (e.altKey && e.which == 67) {
+                if ($('#console').css('display') == 'none') {
+                    $('#console').show();
+                } else {
+                    $('#console').hide();
+                }
+            } else if (e.which == 13 || e.which == 10) {
+                currentTaskBoard.webSocketClient.onMessage({ data: $('#messageBox').val() });
+                currentTaskBoard.webSocketClient.sendMessage();
+            }
+        });
+
+
+    </script>
+}
+
+    <div id="TaskBoardDiv"></div>
+
